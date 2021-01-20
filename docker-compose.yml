@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  php-apache:
+    container_name: php-apache
+    image: php-apache
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ./php/htdocs:/var/www/html/
+    ports:
+      - 8000:80
+    depends_on:
+      - mysql
+  mysql:
+    container_name: mysql
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: alvin
+      MYSQL_PASSWORD: alvin123
+    ports:
+      - 6033:3306
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - 8899:80
+    depends_on:
+      - mysql
+    
